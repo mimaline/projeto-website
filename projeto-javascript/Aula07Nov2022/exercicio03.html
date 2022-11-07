@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 03</title>
+</head>
+<script>
+    function btnOculta() {
+        document.querySelector("p").style.display = "none";
+    }
+
+    function btnMostra() {
+        document.querySelector("p").style.display = "block";
+    }
+</script>
+<body onload="btnOculta()">
+    <!-- Crie uma página com um parágrafo e dois botões: um “Ocultar” e um
+“Mostrar”. Ao clicar no botão Ocultar, modifique a propriedade
+style.display do parágrafo para none. Ao clicar no botão “Mostrar”, altere a
+propriedade style.display do parágrafo para block. -->
+
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, non voluptate quos deserunt odit sint!</p>
+
+<button onclick="btnMostra()">Mostrar</button>
+<button onclick="btnOculta()">Ocultar</button>
+
+</body>
+</html>

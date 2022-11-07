@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ex. 05</title>
+</head>
+
+<script>
+    function peq() {
+        document.querySelector("img").width = 100;
+        document.querySelector("img").height = 100;
+    }
+    function med(){
+        document.querySelector("img").width = 300;
+        document.querySelector("img").height = 300;
+    }
+    function gra(){
+        document.querySelector("img").width = 500;
+        document.querySelector("img").height = 500;
+    }
+
+</script>
+
+<body>
+<!-- Crie uma página contendo 3 botões (Pequena, Média e Grande) e uma
+imagem. Ao clicar no botão Pequena, altere o tamanho da imagem para
+100x100px. Ao clicar no botão Média, altere o tamanho da imagem para
+300x300px. Ao clicar no botão Grande, altere o tamanho da imagem para
+500x500px. -->
+
+<img src="images/adulto.jpg" width="200" height="200">
+<br>
+<button onclick="peq()">Pequena</button>
+<button onclick="med()">Média</button>
+<button onclick="gra()">Grande</button>
+
+</body>
+</html>

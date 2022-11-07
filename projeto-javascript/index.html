@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script type="text/javascript">
+    var TOKEN_SISTEMA = "123";
+
+    function explicacaoVariaveis() {
+        // formas de declarar variaveis
+
+        // pode ser variavel ou constante
+        var TOKEN_USUARIO = "45DA4A54D5A4D5A4D";
+
+        // Definindo uma variavel
+        let idade = 35;
+        const salario = 1500;
+
+        console.log("Idade 1: " + idade + " Salario: " + salario);
+
+        idade = 48;
+        // salario = 1600;
+        console.log("Idade 2: " + idade + " Salario: " + salario);
+    }
+
+    function funcaoClique() {
+        // alert("ola");
+        // buscando elemento pelo id
+        document.getElementById("olamundo").innerHTML = "ID - Texto mudado para => Ola mundo";
+
+        // buscando elemento pela classe
+        document.querySelector(".ola").innerHTML = "Classe - Texto mudado para => Ola mundo";
+
+        // buscando elemento pelo elemento h1
+        document.querySelector("h1").innerHTML = "Pelo Elemento H1 - querySelector - Texto mudado para => Ola mundo";
+
+        // buscando todos elementos pelo elemento h1
+        const aListaDados = document.querySelectorAll("h1");
+
+        debugger;
+        // debugger - F10 vai para frente
+        // debugger - F11 entra na funcao
+        // debugger - F8 - executa ate o final
+
+        let bodyTable = document.querySelector(".containerTable-body");
+        // reset da tabela
+        bodyTable.innerHTML = "";
+
+        aListaDados.forEach(
+            // function(value, key) {
+            //     debugger;
+            //     // ver o que aparece aqui
+            //     var valorTexto = value.innerText;
+
+            //     // setar os dados numa tabela
+            //     // mostrar String Literals  daqui....
+            //     bodyTable.innerHTML += `<tr>
+            //                         <td>${valorTexto}</td> 
+            //                 </tr>`;
+            // }
+
+            // chamando externamente 
+            //);
+
+            function(value, key) {
+                loadDados(value, key, bodyTable);
+            }
+        );
+
+        // Alterando estilo de elementos da pagina 
+        // document.getElementById("olamundo").style.backgroundColor = "yellow";
+
+        // document.querySelector("#olamundo").style.backgroundColor = "yellow";
+
+        // Seleciona apenas o primeiro elemento
+        // document.querySelector(".ola").style.backgroundColor = "red";
+
+        // Seleciona todos os elementos com a classe "ola"
+        const aListaDadosClasseOla = document.querySelectorAll(".ola");
+        aListaDadosClasseOla.forEach(
+            function(value, key) {
+                debugger;
+                value.style.backgroundColor = "red";
+                // const elementoSelecionado = value[];
+            }
+        );
+    }
+
+    function loadDados(value, key, bodyTable) {
+        debugger;
+        // ver o que aparece aqui
+        var valorTexto = value.innerText;
+
+
+        // conteudo html
+        var testes = ` <h1>h1 de testes ${valorTexto}</h1>`;
+
+        // setar os dados numa tabela
+        // mostrar String Literals  daqui....
+        bodyTable.innerHTML += `<tr>
+                                    <td>${valorTexto}</td>
+                                </tr>`;
+    }
+
+    function mudaClasses() {
+        debugger;
+
+        let el = document.getElementById('olamundo');
+
+        //el.classList.remove('ola');
+
+        el.classList.add('ola-teste');
+
+        // verificando se a classe existe
+        var fonte_um = el.classList.contains("fonte_um");
+        var fonte_dois = el.classList.contains("fonte_dois");
+
+        if (!fonte_um) {
+            el.classList.add('fonte_um');
+        } else if (!fonte_dois) {
+            el.classList.add('fonte_dois');
+        }
+    }
+</script>
+
+<style>
+    .ola-teste {
+        background-color: aqua;
+    }
+    
+    .fonte_um {
+        font-size: 55px;
+    }
+    
+    .fonte_dois {
+        font-size: 5px;
+    }
+</style>
+
+<body>
+    <p id="olamundo" class="ola-tag-p">Vai mudar aqui...</p>
+
+    <h1 id="olamundo" class="ola">Vai mudar aqui 2 ...</h1>
+    <h1 id="olamundo" class="ola">Vai mudar aqui 2 ...</h1>
+    <h1 id="olamundo" class="ola">Vai mudar aqui 2 ...</h1>
+    <h1 id="olamundo" class="ola">Vai mudar aqui 2 ...</h1>
+
+    <button onclick="funcaoClique()">clique aqui!</button>
+    <button onclick="testeSeparado()">Separado</button>
+    <button onclick="explicacaoVariaveis()">Variaveis</button>
+    <button onclick="mudaClasses()">Mudando classes</button>
+
+    <h2>Minha Tabela de Dados</h2>
+    <table class="container-table" border="1">
+        <thead>
+            <tr>
+                <th class="containerTable-lblTitle">Conteudo da Tabela</th>
+            </tr>
+        </thead>
+        <tbody class="containerTable-body">
+            <!--PREENCHIDO ATRAVES DE JAVASCRIPT!!!-->
+        </tbody>
+    </table>
+
+    <!-- Colocado aqui para carregar apenas no fim do load da pagina -->
+    <script src="meuScript.js" defer></script>
+</body>
+
+</html>

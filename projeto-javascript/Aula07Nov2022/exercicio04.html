@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercicio 04</title>
+</head>
+<script>
+    function trocarImagem() {
+        document.querySelector("img").src = "images/adulto.jpg";
+        console.log("Imagem Trocada com Sucesso")
+    }
+</script>
+
+<body>
+    <!-- Crie uma página com uma imagem de uma criança (ex: “crianca.jpg”) e um
+botão “Crescer”. Crie uma função chamada trocarImagem. Nessa função,
+altere a propriedade src da imagem para “adulto.jpg”. Chame a função
+trocarImagem no onclick do botão Crescer. Escreva ainda um log no console
+com a mensagem “Imagem trocada com sucesso!”.
+ -->
+<img src="images/crianca.webp" width="300" height="200">
+<br>
+<button onclick="trocarImagem()">Crescer</button>
+
+</body>
+</html>

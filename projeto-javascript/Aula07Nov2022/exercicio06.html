@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    function mudaImagem(nomeImagem) {
+        console.log("imagem" + nomeImagem)
+        document.querySelector("#img-maior").src = "images/" + nomeImagem
+    }
+</script>
+<body>
+    <!-- Crie uma página contendo 3 miniaturas de imagens e uma div. Ao clicar
+em cada imagem, a imagem clicada deve aparecer no seu tamanho
+original na div -->
+<div>
+    <div class="miniaturas">
+        <img onclick="mudaImagem('hamtaro.jpg')" src="images/hamtaro.jpg"  width="100" height="100">
+        <img onclick="mudaImagem('baymax.jpeg')"  src="images/baymax.jpeg" width="100" height="100">
+        <img onclick="mudaImagem('pikapi.jfif')" src="images/pikapi.jfif"  width="100" height="100">
+    </div>
+    <div class="maior">
+        <img id="img-maior" src="images/baymax.jpeg" alt="" width="300" height="300">
+    </div>
+</div>
+
+</body>
+</html>

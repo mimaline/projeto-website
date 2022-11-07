@@ -39,7 +39,7 @@
     "dotenv" : "tune"
   },
   "typescript.updateImportsOnFileMove.enabled" : "never",
-  "workbench.colorTheme" : "Material Theme Ocean",
+  "workbench.colorTheme" : "Midnight Green",
   "material-icon-theme.files.associations" : {
     "tsconfig.json" : "tune",
     "*.webpack.js" : "webpack",

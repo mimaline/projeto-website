@@ -61,10 +61,137 @@
     }
 </style>
 
-<body>
+<body onload="getPaises()">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script type="text/javascript">
+        function isTesteLocal() {
+            return false;
+        }
+
+        function getTokenSupabase() {
+            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0bXRiZ2JwYW1ueGdnZHlnbmVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjMyNjE5MzYsImV4cCI6MTk3ODgzNzkzNn0.esPj4dQ_fHGsXln0sSqKjjXuzYjOrAS7yxwyf97BIIc";
+        }
+
+        function getPaises() {
+            data = {};
+            callApi("GET", "countries", undefined, function(data) {
+                loadDadosPaises(data);
+            });
+        }
+
+        function loadDadosPaises(data) {
+            debugger;
+
+            const paises = data;
+
+            let bodyTable = document.querySelector(".containerTable-body");
+            // reset da tabela
+            bodyTable.innerHTML = '';
+
+            let quantidadeIndefinido = 1;
+            // percorre os paises e conta quantos tem em cada continente
+            paises.forEach(function(oPais, key) {
+                let continent = "CONTINENTE VAZIO";
+                if (oPais.continent != undefined) {
+                    id = oPais.id;
+                    name = oPais.name;
+                    continent = oPais.continent;
+
+                    debugger;
+
+                    // colocando pais na tabela de html
+                    bodyTable.innerHTML += `<tr>
+                                            <td>${id}</td>
+                                            <td>${name}</td>
+                                            <td>${continent}</td>
+                                        </tr>`;
+                } else {
+                    quantidadeIndefinido++;
+                }
+
+            });
+
+
+        }
+
+        function getUrlBase(port) {
+
+           return "https://ytmtbgbpamnxggdygnej.supabase.co/rest/v1/countries?select=*";
+
+        }
+
+        function getMyInitFetchApi(method, body) {
+            let usaBody = false;
+            if (method == "POST") {
+                usaBody = true;
+            }
+
+            if (usaBody) {
+                return {
+                    method: method,
+                    //headers: getHeadersSupabase(),
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    body: JSON.stringify(body)
+                };
+            }
+
+            return {
+                method: method,
+                //headers: getHeaders(),
+                headers: getHeadersSupabase(),
+                mode: 'cors',
+                cache: 'no-cache'
+            };
+        }
+
+        function getHeadersSupabase() {
+            return new Headers({
+                "apikey": getTokenSupabase(),
+                "Authorization": "Bearer " + getTokenSupabase(),
+            });
+        }
+
+        async function callApi(method, port, body, oCall) {
+            debugger;
+
+            if (body == undefined) {
+                body = "";
+            }
+
+            if (method == undefined) {
+                method = "GET";
+            }
+
+            if (port == undefined) {
+                port = "ping";
+            }
+
+            // Define a url
+            const url = getUrlBase(port);
+
+            console.log("url gerada:" + url);
+
+            const myInit = getMyInitFetchApi(method, body);
+
+            const promise = await fetch(url, myInit)
+                // Converting the response to a JSON object
+                .then(response => response.json())
+                .then(data => {
+
+                    console.log(data);
+
+                    if (oCall) {
+                        // Chama a function por parametro com os dados retornados...
+                        oCall(data);
+                    }
+
+                })
+                .catch(function(error) {
+                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                });
+        }
     </script>
 
     <!-- dados unifique -->
@@ -85,6 +212,8 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="https://unifique-clone.vercel.app/">Home</a></li>
+                        <!-- <li><a href="grafico.html" class="current">Teste Grafico Paises</a></li>
+                        <li><a href="#" onclick="callApiSupaBase()" class="current">Teste SupaBase</a></li> -->
                         <li><a href="https://unifique-clone.vercel.app/cobrancas/pagas/" onclick="registraLog(cobrancasPagas)" class="current">Cobrancas pagas</a></li>
                         <li><a href="https://unifique-clone.vercel.app/cobrancas/abertas/" onclick="registraLog(cobrancasEmAberto)">Cobrancas em aberto</a></li>
                         <li class="disabled"><a href="https://unifique-clone.vercel.app/gerenciar/emails/" onclick="registraLog(gerenciarEmails)">Gerenciar e-mails</a></li>
@@ -105,15 +234,9 @@
 
         <img style="max-width:432px;" src="./unifique_files/logo2017.png" width="100%">
         <ul class="iconMenuDark hidden-xs">
-
-            <li><a title="Cobrancas pagas" href="paises.html" class="current"><span class="ico_light_cobrancas_pagas"></span>Paises</a></li>
-
-
             <li><a title="Cobrancas pagas" href="grafico.html" onclick="callApiSupaBase()" class="current"><span class="ico_light_cobrancas_pagas"></span>Graficos</a></li>
-
-            <li><a title="Cobrancas pagas" href="#" onclick="atualizaFaturas(2)" class="current"><span class="ico_light_cobrancas_pagas"></span>Cobrancas Pagas</a></li>
-            <li><a title="Cobrancas em aberto" href="#" onclick="atualizaFaturas(1)"><span class="ico_light_cobrancas_abertas"></span>Cobrancas em aberto</a></li>
-
+            <li><a title="Cobrancas pagas" href="https://unifique-clone.vercel.app/cobrancas/pagas/" onclick="registraLog(cobrancasPagas)" class="current"><span class="ico_light_cobrancas_pagas"></span>Cobrancas Pagas</a></li>
+            <li><a title="Cobrancas em aberto" href="https://unifique-clone.vercel.app/cobrancas/abertas/" onclick="registraLog(cobrancasEmAberto)"><span class="ico_light_cobrancas_abertas"></span>Cobrancas em aberto</a></li>
             <li class="disabled"><a title="Gerenciar e-mails (Plano n�o contratado)" href="https://unifique-clone.vercel.app/cobrancas/pagas/#" onclick="registraLog(gerenciarEmails)"><span class="ico_light_emails"></span>Gerenciar e-mails</a></li>
             <li class="disabled"><a title="Gerenciar dominios (Plano n�o contratado)" href="https://unifique-clone.vercel.app/cobrancas/pagas/#" onclick="registraLog(gerenciarDominios)"><span class="ico_light_dominios"></span>Gerenciar dominios</a></li>
             <li class="disabled"><a title="Gerenciar usuarios de FTP (Plano n�o contratado)" href="https://unifique-clone.vercel.app/cobrancas/pagas/#" onclick="registraLog(usuariosFtps)"><span class="ico_light_ftps"></span>Usuarios de FTPs</a></li>
@@ -131,17 +254,16 @@
     <center>
         <div class="container">
             <br><br>
-            <p class="title" id="pagas">Cobrancas Pagas</p>
-            <p class="title" id="abertas">Cobrancas em Aberto</p>
+            <p class="title">Cobrancas pagas</p>
             <div id="countrieschart"></div>
+            <button onclick="getPaises()">Listar paises Novo</button>
+
             <table class="container-table" border="1">
                 <thead>
                     <tr>
                         <th class="containerTable-lblTitle">id</th>
-                        <th class="containerTable-lblTitle">Data Pagamento</th>
-                        <th class="containerTable-lblTitle">Data vencimento</th>
-                        <th class="containerTable-lblTitle">Valor vencimento</th>
-                        <th class="containerTable-lblTitle">Valor pago</th>
+                        <th class="containerTable-lblTitle">Continente</th>
+                        <th class="containerTable-lblTitle">Pais</th>
                     </tr>
                 </thead>
                 <!-- .containerTable-body -->
@@ -191,8 +313,5 @@
         <div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 1099px; width: 1259px; z-index: -999999; position: fixed;"></div>
     </center>
 </body>
-
-<script src="token.js" defer></script>
-<script src="faturas.js" defer></script>
 
 </html>

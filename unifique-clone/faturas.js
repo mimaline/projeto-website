@@ -1,143 +1,45 @@
-// function getTokenSupabase() {
-//     // Alex
-//     //return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0ZGVpcG9sa2xydWhlcGppZWt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjMwMDE5MjIsImV4cCI6MTk3ODU3NzkyMn0.YHDU5hRIENIPe-Zbre3A17Qsdby2StDe8xUQ6-0AakE";
+var STATUS_FATURA_EM_ABERTO = 1;
+var STATUS_FATURA_PAGA = 2;
 
-//     return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkY3N6cXZ2cndkcWNuanZjb3h0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjAyNTUxNTUsImV4cCI6MTk3NTgzMTE1NX0.U-3HSFgKo9ydTnKrpQsx5ytrBcLSpGwzVn6LqNwn14E";
-// }
-
-function getPaises() {
-    data = {};
-    callApi("GET", "countries", undefined, function(data) {
-        loadDadosPaises(data);
-    });
+function onLoadPaginas() {
+    atualizaBotaoStatus(STATUS_FATURA_EM_ABERTO);
 }
 
-function loadDadosPaises(data) {
-    const paises = data;
-
-    let bodyTable = document.querySelector(".containerTable-body");
-    // reset da tabela
-    bodyTable.innerHTML = '';
-
-    let quantidadeIndefinido = 1;
-    // percorre os paises e conta quantos tem em cada continente
-    paises.forEach(function(oPais, key) {
-        let continent = "CONTINENTE VAZIO";
-        if (oPais.continent != undefined) {
-            id = oPais.id;
-            name = oPais.name;
-            continent = oPais.continent;
-
-            debugger;
-
-            // colocando pais na tabela de html
-            bodyTable.innerHTML += `<tr>
-                                            <td>${id}</td>
-                                            <td>${name}</td>
-                                            <td>${continent}</td>
-                                        </tr>`;
-        } else {
-            quantidadeIndefinido++;
-        }
-
-    });
-}
-
-// function getUrlBase(port) {
-//     // alex - https: //rtdeipolklruhepjiekz.supabase.co/rest/v1/countries?select=*
-//     // gelvazio - https://vdcszqvvrwdqcnjvcoxt.supabase.co/rest/v1/countries?select=*";
-//     return "https://vdcszqvvrwdqcnjvcoxt.supabase.co/rest/v1/" + port + "select=*";
-
-//     // acesso supabase
-//     // The schema migration "revoke superuser access"
-//     // will be finalized
-//     // for project "BancoDadosSenac"
-//     // within a few days.You may opt to finalize the changes now, or it 'll be done so automatically.
-// }
-
-function getMyInitFetchApi(method, body) {
-    let usaBody = false;
-    if (method == "POST") {
-        usaBody = true;
-    }
-
-    if (usaBody) {
-        return {
-            method: method,
-            //headers: getHeadersSupabase(),
-            mode: 'cors',
-            cache: 'no-cache',
-            body: JSON.stringify(body)
-        };
-    }
-
-    return {
-        method: method,
-        //headers: getHeaders(),
-        headers: getHeadersSupabase(),
-        mode: 'cors',
-        cache: 'no-cache'
-    };
-}
-
-function getHeadersSupabase() {
-    return new Headers({
-        "apikey": getTokenSupabase(),
-        "Authorization": "Bearer " + getTokenSupabase(),
-    });
-}
-
-async function callApi(method, port, body, oCall) {
-    if (body == undefined) {
-        body = "";
-    }
-
-    if (method == undefined) {
-        method = "GET";
-    }
-
-    if (port == undefined) {
-        port = "ping";
-    }
-
-    // Define a url
-    const url = getUrlBase(port);
-
-    console.log("url gerada:" + url);
-
-    const myInit = getMyInitFetchApi(method, body);
-
-    const promise = await fetch(url, myInit)
-        // Converting the response to a JSON object
-        .then(response => response.json())
-        .then(data => {
-
-            console.log(data);
-
-            if (oCall) {
-                // Chama a function por parametro com os dados retornados...
-                oCall(data);
-            }
-
-        })
-        .catch(function(error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-        });
+function isLoadDadosFixos() {
+    return false;
 }
 
 function atualizaFaturas(status) {
     port = "tbfatura?status=eq." + status + "&";
 
-    data = {};
-    callApi("GET", port, undefined, function(data) {
-        loadFaturas(data);
-    });
+    // Atualiza os status dos botoes
+    atualizaBotaoStatus(status);
+
+    if (isLoadDadosFixos()) {
+        // Carrega uma lista de dados fixos, para nao gastar todas as chamadas api
+        var dadosFaturas = JSON.parse(LISTA_FATURAS);
+        loadFaturas(dadosFaturas);
+    } else {
+        // Chama a api da Supabase
+        data = {};
+        callApi("GET", port, undefined, function(data) {
+            loadFaturas(data);
+        });
+    }
+}
+
+function atualizaBotaoStatus(status) {
+    if (status == STATUS_FATURA_EM_ABERTO) {
+        document.querySelector("#cobranca-aberto").style.display = "block";
+        document.querySelector("#cobranca-pago").style.display = "none";
+    } else if (status == STATUS_FATURA_PAGA) {
+        document.querySelector("#cobranca-aberto").style.display = "none";
+        document.querySelector("#cobranca-pago").style.display = "block";
+    }
 }
 
 function loadFaturas(data) {
     const faturas = data;
-
-    debugger;
 
     let bodyTable = document.querySelector(".containerTable-body");
     // reset da tabela
@@ -156,6 +58,8 @@ function loadFaturas(data) {
             const valorvencimento = oFatura.valorvencimento;
             const valorpagamento = oFatura.valorpagamento;
 
+            const htmlBotaoBoletos = getHtmlBotaoBoletos(id);
+
             // colocando as faturas na tabela de html
             bodyTable.innerHTML += `<tr>
                                             <td>${id}</td>
@@ -163,8 +67,84 @@ function loadFaturas(data) {
                                             <td>${datavencimento}</td>
                                             <td>${valorvencimento}</td>
                                             <td>${valorpagamento}</td>
+                                            <td>${htmlBotaoBoletos}</td>
                                         </tr>`;
 
         });
+    }
+}
+
+function getHtmlBotaoBoletos(idFatura) {
+    return `
+     <a title="Cobrancas pagas" href="#" class="open-detalheFatura title" data-toggle="modal" data-id="${idFatura}" data-target="#modalFatura">
+        <p class="title">Detalhar</p>
+    </a>
+    `;
+}
+
+// Evento que trata o modal de detalhe da fatura
+$(document).on("click", ".open-detalheFatura", function() {
+    var idFatura = $(this).data('id');
+
+    console.log("id fatura" + idFatura);
+
+    // Seta o id da fatura no modal
+    $(".modal-body #idfatura").val(idFatura);
+
+    // chama a api para carregar os detalhes da fatura
+    loadDadosFatura(idFatura);
+});
+
+function loadDadosFatura(idFatura) {
+    // criar a tabela de detalhes da fatura - ok
+
+    // Chamar a api do supabase
+    // Chama a api da Supabase
+    data = {};
+    port = "tbfaturadetalhe?idfatura=eq." + idFatura + "&";
+    callApi("GET", port, undefined, function(data) {
+        // Setar os dados da fatura no modal
+        loadDadosFaturaDetalhe(data);
+    });
+}
+
+function loadDadosFaturaDetalhe(data) {
+    const faturasDetalhe = data;
+    debugger;
+
+    let bodyTable = document.querySelector(".containerTableDetalhe-body");
+    // reset da tabela
+    bodyTable.innerHTML = '';
+
+    let temDados = false;
+    if (parseInt(faturasDetalhe.length) > 0) {
+        temDados = true;
+    }
+
+    if (temDados) {
+        faturasDetalhe.forEach(function(oFaturaDetalhe, key) {
+            const id = oFaturaDetalhe.id;
+            const idfaturaApi = oFaturaDetalhe.idfatura;
+            const circuito = oFaturaDetalhe.circuito;
+            const codigoservico = oFaturaDetalhe.codigoservico;
+            const descricaoservico = oFaturaDetalhe.descricaoservico;
+            const datainicioservico = oFaturaDetalhe.datainicioservico;
+            const datafimservico = oFaturaDetalhe.datafimservico;
+            const valorservico = oFaturaDetalhe.valorservico;
+
+            // colocando os detalhes da faturas na tabela de html
+            bodyTable.innerHTML += `<tr>
+                                            <td>${descricaoservico}</td>
+                                            <td>${datainicioservico}</td>
+                                            <td>${datafimservico}</td>
+                                            <td>${circuito}</td>
+                                            <td>${valorservico}</td>
+                                        </tr>`;
+
+        });
+    } else {
+        bodyTable.innerHTML = `<tr>
+                                    <td colspan="5" style="color:red;font-size:25px; text-align:center;">Fatura sem Detalhes!</td>
+                                </tr>`;
     }
 }

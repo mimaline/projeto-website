@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script>
+    function funcaoClique() {
+        //alert('ola')
+        //pega o id do elemento a ser alterado
+        // document.getElementById("olamundo").innerHTML="Ola Mundo";
+        // pegando por class
+        document.querySelector(".ola").innerHTML="Oier"
+
+         // pegando por id
+         document.querySelector("#olamundo").innerHTML="Oier"
+         //pegando o elemento
+         document.querySelector("h1").innerHTML="Oier"
+        }
+</script>
+<body>
+    <p id="olamundo" class="ola">Vai mudar aqui</p>
+    <h1 id="olamundo" class="ola">Vai mudar aqui</h1>
+    <button onclick="funcaoClique()">Clique Aqui</button>
+</body>
+</html>
